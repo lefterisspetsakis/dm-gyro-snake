@@ -1,32 +1,15 @@
 #define LED_PIN 13
 
-#define C1 2 // Anode, 1st bit (2^1)
-#define C2 3 // Anode, 2nd bit (2^2)
-#define C3 4 // Anode, 3rd bit (2^3)
-
-#define A1 6 // Cathode, 1st bit (2^1)
-#define A2 7 // Cathode, 2nd bit (2^2)
-#define A3 8 // Cathode, 3rd bit (2^3)
-
 #define FREQ 60 // Hz
 
 short int catPins[3] = {2, 3, 4};   // pins on the ATmega328P
 short int anPins[3] = {6, 7, 8};    // pins on the ATmega328P
 
-short int inCoordX = 0;
-short int inCoordY = 0;
+// LED Pins:   {13, 3, 4, 10, 6}  <- dot matrix pins
+int c_pins[5] = {4, 0, 1, 3, 2};
 
-
-
-  // LED Pins:        {6, 10, 4, 3, 13}
-  // c_pins decimal:  {2, 3, 1, 0, 4}
-int c_pins[5] = {2, 3, 1, 0, 4};
-//  short int c_pins[5] = {010, 011, 001, 000, 100};
-
-  // LED Pins:        {9, 14, 8, 5, 1, 7, 2}  <- dot matrix pins
-  // a_pins decimal:  {5, 6, 4, 2, 0, 3, 1}   <- decoder pins
+// LED Pins:    {9, 14, 8, 5, 1, 7, 2}  <- dot matrix pins
 int a_pins[7] = {5, 6, 4, 2, 0, 3, 1};
-//  short int a_pins[7] = {101, 110, 100, 010, 000, 011, 001};
 
 /*   LED Numbering
  *   ---__---__---    <-- physical notches on dot matrix
@@ -59,39 +42,23 @@ void dispLED(short int loc_x, short int loc_y) {
   int y;
   
   x = a_pins[loc_x];
-  Serial.print("x = ");
-  Serial.println(x, DEC);
   y = c_pins[loc_y];
-  Serial.print("y = ");
-  Serial.println(y, DEC);
   
   for (int i; i<3; i++) {
     if (x&1) {
-      Serial.print("Anode Pin ");
-      Serial.print(i, DEC);
-      Serial.println(" is HIGH");
       digitalWrite(anPins[i], HIGH);
     } else {
-      Serial.print("Anode Pin ");
-      Serial.print(i, DEC);
-      Serial.println(" is LOW");
       digitalWrite(anPins[i], LOW);
     }
 
     if (y&1) {
-      Serial.print("Cathode Pin ");
-      Serial.print(i, DEC);
-      Serial.println(" is HIGH");
       digitalWrite(catPins[i], HIGH);
     } else {
-      Serial.print("Cathode Pin ");
-      Serial.print(i, DEC);
-      Serial.println(" is LOW");
       digitalWrite(catPins[i], LOW);
     }
 
-    x >> 1;
-    y >> 1;
+    x = x >> 1;
+    y = y >> 1;
   }
 }
 
@@ -109,18 +76,7 @@ void setup() {
 }
 
 void loop() {
-  if (Serial.available() > 0) {
-          // read the incoming byte:
-          inCoordX = Serial.read();
-
-          Serial.print("I received: ");
-          Serial.println(inCoordX, DEC);
-          dispLED(5, 2);
-  }
-
-  
-
-  
+  dispLED(0, 3);
 }
 
 
