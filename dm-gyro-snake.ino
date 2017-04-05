@@ -20,12 +20,12 @@ short int inCoordY = 0;
 
   // LED Pins:        {6, 10, 4, 3, 13}
   // c_pins decimal:  {2, 3, 1, 0, 4}
-short int c_pins[5] = {2, 3, 1, 0, 4};
+int c_pins[5] = {2, 3, 1, 0, 4};
 //  short int c_pins[5] = {010, 011, 001, 000, 100};
 
   // LED Pins:        {9, 14, 8, 5, 1, 7, 2}  <- dot matrix pins
   // a_pins decimal:  {5, 6, 4, 2, 0, 3, 1}   <- decoder pins
-short int a_pins[7] = {5, 6, 4, 2, 0, 3, 1};
+int a_pins[7] = {5, 6, 4, 2, 0, 3, 1};
 //  short int a_pins[7] = {101, 110, 100, 010, 000, 011, 001};
 
 /*   LED Numbering
@@ -55,22 +55,38 @@ void dispLED(short int loc_x, short int loc_y) {
    * on the decoder that drives the dot matrix (LEDs)
    */
 
-  short int x;
-  short int y;
+  int x;
+  int y;
   
   x = a_pins[loc_x];
+  Serial.print("x = ");
+  Serial.println(x, DEC);
   y = c_pins[loc_y];
+  Serial.print("y = ");
+  Serial.println(y, DEC);
   
   for (int i; i<3; i++) {
     if (x&1) {
+      Serial.print("Anode Pin ");
+      Serial.print(i, DEC);
+      Serial.println(" is HIGH");
       digitalWrite(anPins[i], HIGH);
     } else {
+      Serial.print("Anode Pin ");
+      Serial.print(i, DEC);
+      Serial.println(" is LOW");
       digitalWrite(anPins[i], LOW);
     }
 
     if (y&1) {
+      Serial.print("Cathode Pin ");
+      Serial.print(i, DEC);
+      Serial.println(" is HIGH");
       digitalWrite(catPins[i], HIGH);
     } else {
+      Serial.print("Cathode Pin ");
+      Serial.print(i, DEC);
+      Serial.println(" is LOW");
       digitalWrite(catPins[i], LOW);
     }
 
@@ -99,9 +115,10 @@ void loop() {
 
           Serial.print("I received: ");
           Serial.println(inCoordX, DEC);
+          dispLED(5, 2);
   }
 
-  dispLED(5, 2);
+  
 
   
 }
